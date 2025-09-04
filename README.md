@@ -5,32 +5,28 @@ Papyr is a lightwight, fast and modern note-taking app and the core of the Papyr
 It aims a seemless markdown expirence focusing on writing without distractions.
 
 # Development
-## Project Setup
 
+Project Setup
 ```sh
 npm install
 ```
 
-### Compile and Hot-Reload for Development
-
+Compile for Development
 ```sh
 npm run dev
 ```
 
-### Compile and Minify for Production
-
+Compile for Production
 ```sh
 npm run build
 ```
 
-### Run Unit Tests with [Vitest](https://vitest.dev/)
-
+Unit Test with [Vitest](https://vitest.dev/)
 ```sh
 npm run test:unit
 ```
 
-### Lint with [ESLint](https://eslint.org/)
-
+Lint with [ESLint](https://eslint.org/)
 ```sh
 npm run lint
 ```
