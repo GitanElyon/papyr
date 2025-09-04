@@ -1,15 +1,10 @@
 # papyr
 
-This template should help get you started developing with Vue 3 in Vite.
+Papyr is a lightwight, fast and modern note-taking app and the core of the Papyrus ecosystem.
 
-## Recommended IDE Setup
+It aims a seemless markdown expirence focusing on writing without distractions.
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vite.dev/config/).
-
+# Development
 ## Project Setup
 
 ```sh
