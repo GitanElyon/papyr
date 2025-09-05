@@ -286,4 +286,10 @@ defineExpose({
 .muya-editor :deep(.mu-content:hover .mu-remove) {
   opacity: 0.6 !important;
 }
+
+/* Fix inline code styling to match theme text color */
+.muya-editor :deep(code.mu-inline-rule) {
+  color: var(--color-text) !important;
+  background-color: transparent !important;
+}
 </style>

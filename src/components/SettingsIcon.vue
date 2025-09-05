@@ -22,8 +22,8 @@ defineEmits(['toggle-settings'])
   left: 20px;
   width: 44px;
   height: 44px;
-  background: var(--color-background-soft);
-  border: 1px solid var(--color-border);
+  background: transparent;
+  border: none;
   border-radius: 6px;
   cursor: pointer;
   display: flex;
@@ -34,8 +34,7 @@ defineEmits(['toggle-settings'])
 }
 
 .settings-icon:hover {
-  background: var(--color-background-mute);
-  border-color: var(--color-border-hover);
+  background: rgba(128, 128, 128, 0.1);
   transform: translateY(-1px);
 }
 
@@ -45,6 +44,7 @@ defineEmits(['toggle-settings'])
 }
 
 .settings-icon:hover svg {
-  fill: var(--color-heading);
+  fill: var(--color-text);
+  opacity: 0.8;
 }
 </style>
