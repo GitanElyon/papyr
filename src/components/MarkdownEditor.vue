@@ -139,11 +139,14 @@ onMounted(() => {
         setTimeout(handleCursorMovement, 10) // Small delay to ensure DOM is updated
       })
       
-      // Add keyboard event listener for immediate scrolling on arrow keys
-      muya.on('key-down', (event) => {
-        if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'PageUp', 'PageDown', 'Home', 'End'].includes(event.key)) {
-          setTimeout(handleCursorMovement, 10)
-        }
+      // Add additional event listeners for comprehensive cursor tracking
+      muya.on('change', () => {
+        setTimeout(handleCursorMovement, 10)
+      })
+      
+      // Also listen to focus events
+      muya.on('focus', () => {
+        setTimeout(handleCursorMovement, 50)
       })
       
       // Focus the editor after initialization
