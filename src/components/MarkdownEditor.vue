@@ -86,6 +86,31 @@ const scrollToCursor = (cursorRect) => {
     // Cursor is below visible area, scroll down  
     container.scrollBy(0, cursorBottom - (containerBottom - scrollBuffer))
   }
+
+}
+
+const defaultOptions = {
+  markdown: '# Welcome to Papyr\n\nStart writing your markdown here...\n\n## Features\n\n- **Bold text**\n- *Italic text*\n- [Links](https://example.com)\n- `Code snippets`\n\n```javascript\nfunction hello() {\n  console.log("Hello World!");\n}\n```\n\n> This is a blockquote\n\n1. Ordered list item 1\n2. Ordered list item 2\n\n- Unordered list item\n- Another item\n',
+  fontSize: 16,
+  lineHeight: 1.6,
+  focusMode: false,
+  theme: 'dark',
+  spellcheckEnabled: true,
+  bulletListMarker: '-',
+  orderListMarker: '.',
+  preferLooseListItem: true,
+  autoPairBracket: true,
+  autoPairMarkdownSyntax: true,
+  autoPairQuote: true,
+  trimUnnecessaryCodeBlockEmptyLines: true,
+  codeBlockLineNumbers: false,
+  sequenceTheme: 'hand-drawn',
+  mermaidTheme: 'dark',
+  hideQuickInsertHint: false,
+  hideLinkPopup: false,
+  autoCheck: false,
+  listIndentation: 1,
+  tabSize: 4
 }
 
 const getInitialOptions = () => ({
@@ -125,6 +150,18 @@ onMounted(() => {
         console.log('Selection changed:', changes)
         // Handle cursor position tracking and scrolling
         setTimeout(handleCursorMovement, 10) // Small delay to ensure DOM is updated
+
+      })
+      
+      // Add additional event listeners for comprehensive cursor tracking
+      muya.on('change', () => {
+        setTimeout(handleCursorMovement, 10)
+      })
+      
+      // Also listen to focus events
+      muya.on('focus', () => {
+        setTimeout(handleCursorMovement, 50)
+
       })
       
       // Focus the editor after initialization
