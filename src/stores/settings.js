@@ -6,9 +6,11 @@ const DEFAULT_SETTINGS = {
     name: 'Dark',
     backgroundColor: '#1a1a1a',
     textColor: '#ffffff',
+    selectionColor: '#3b82f6',
     fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
     fontSize: 16,
-    lineHeight: 1.6
+    lineHeight: 1.6,
+    paragraphSpacing: 16
   },
   editor: {
     focusMode: false,
@@ -66,9 +68,11 @@ export const applyTheme = () => {
   const root = document.documentElement
   root.style.setProperty('--color-background', settings.theme.backgroundColor)
   root.style.setProperty('--color-text', settings.theme.textColor)
+  root.style.setProperty('--color-selection', settings.theme.selectionColor)
   root.style.setProperty('--editor-font-family', settings.theme.fontFamily)
   root.style.setProperty('--editor-font-size', `${settings.theme.fontSize}px`)
   root.style.setProperty('--editor-line-height', settings.theme.lineHeight.toString())
+  root.style.setProperty('--editor-paragraph-spacing', `${settings.theme.paragraphSpacing}px`)
 }
 
 // Helper function to get Muya options from settings
@@ -105,22 +109,26 @@ export const THEME_PRESETS = [
   {
     name: 'Dark',
     backgroundColor: '#1a1a1a',
-    textColor: '#ffffff'
+    textColor: '#ffffff',
+    selectionColor: '#3b82f6'
   },
   {
     name: 'Light',
     backgroundColor: '#ffffff',
-    textColor: '#2c3e50'
+    textColor: '#2c3e50',
+    selectionColor: '#007acc'
   },
   {
     name: 'Sepia',
     backgroundColor: '#f4f1ea',
-    textColor: '#5c4b37'
+    textColor: '#5c4b37',
+    selectionColor: '#8b4513'
   },
   {
     name: 'High Contrast',
     backgroundColor: '#000000',
-    textColor: '#ffffff'
+    textColor: '#ffffff',
+    selectionColor: '#ffff00'
   }
 ]
 

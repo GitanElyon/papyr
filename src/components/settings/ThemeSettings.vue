@@ -62,6 +62,24 @@
     </div>
     
     <div class="setting-group">
+      <label class="setting-label" for="selection-color">Selection Color</label>
+      <div class="color-input-group">
+        <input
+          id="selection-color"
+          type="color"
+          v-model="settings.theme.selectionColor"
+          @change="updateTheme"
+        />
+        <input
+          type="text"
+          v-model="settings.theme.selectionColor"
+          @change="updateTheme"
+          class="color-text-input"
+        />
+      </div>
+    </div>
+    
+    <div class="setting-group">
       <label class="setting-label" for="font-family">Font Family</label>
       <select
         id="font-family"
@@ -108,6 +126,23 @@
         <span class="range-value">{{ settings.theme.lineHeight }}</span>
       </div>
     </div>
+    
+    <div class="setting-group">
+      <label class="setting-label" for="paragraph-spacing">Paragraph Spacing</label>
+      <div class="range-input-group">
+        <input
+          id="paragraph-spacing"
+          type="range"
+          min="8"
+          max="32"
+          step="2"
+          v-model="settings.theme.paragraphSpacing"
+          @input="updateTheme"
+          class="setting-range"
+        />
+        <span class="range-value">{{ settings.theme.paragraphSpacing }}px</span>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -118,6 +153,7 @@ const applyPreset = (preset) => {
   settings.theme.name = preset.name
   settings.theme.backgroundColor = preset.backgroundColor
   settings.theme.textColor = preset.textColor
+  settings.theme.selectionColor = preset.selectionColor
   updateTheme()
 }
 

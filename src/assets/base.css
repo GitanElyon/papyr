@@ -84,3 +84,14 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+/* Global text selection styling */
+::selection {
+  background-color: var(--color-selection, #3b82f6);
+  color: var(--color-text);
+}
+
+::-moz-selection {
+  background-color: var(--color-selection, #3b82f6);
+  color: var(--color-text);
+}

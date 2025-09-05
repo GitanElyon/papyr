@@ -150,4 +150,25 @@ defineExpose({
   border: none;
   box-shadow: none;
 }
+
+/* Apply selection color to text selection */
+.muya-editor ::selection {
+  background-color: var(--color-selection, #3b82f6);
+  color: var(--color-text);
+}
+
+.muya-editor ::-moz-selection {
+  background-color: var(--color-selection, #3b82f6);
+  color: var(--color-text);
+}
+
+/* Apply paragraph spacing */
+.muya-editor p {
+  margin-bottom: var(--editor-paragraph-spacing, 16px);
+}
+
+/* Also apply to Muya-specific paragraph elements */
+.muya-editor .ag-paragraph {
+  margin-bottom: var(--editor-paragraph-spacing, 16px);
+}
 </style>
