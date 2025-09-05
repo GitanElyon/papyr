@@ -11,7 +11,7 @@ import MarkdownEditor from '../components/MarkdownEditor.vue'
 <style scoped>
 .home-view {
   width: 100%;
-  height: calc(100vh - 80px);
+  height: 100vh;
   padding: 0;
   margin: 0;
 }
