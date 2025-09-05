@@ -84,3 +84,9 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+/* Restore bold formatting for strong and b elements */
+strong,
+b {
+  font-weight: bold;
+}
