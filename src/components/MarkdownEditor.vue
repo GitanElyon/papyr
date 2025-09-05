@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, watch } from 'vue'
 import {
   Muya,
   EmojiSelector,
@@ -22,6 +22,7 @@ import {
   PreviewToolBar,
 } from '@muyajs/core'
 import '@muyajs/core/lib/style.css'
+import { settings, getMuyaOptions, applyTheme } from '../stores/settings.js'
 
 // Use muya plugins
 Muya.use(EmojiSelector)
@@ -40,35 +41,19 @@ Muya.use(PreviewToolBar)
 const editorContainer = ref(null)
 let muya = null
 
-const defaultOptions = {
+const getInitialOptions = () => ({
   markdown: '# Welcome to Papyr\n\nStart writing your markdown here...\n\n## Features\n\n- **Bold text**\n- *Italic text*\n- [Links](https://example.com)\n- `Code snippets`\n\n```javascript\nfunction hello() {\n  console.log("Hello World!");\n}\n```\n\n> This is a blockquote\n\n1. Ordered list item 1\n2. Ordered list item 2\n\n- Unordered list item\n- Another item\n',
-  fontSize: 16,
-  lineHeight: 1.6,
-  focusMode: false,
-  theme: 'dark',
-  spellcheckEnabled: true,
-  bulletListMarker: '-',
-  orderListMarker: '.',
-  preferLooseListItem: true,
-  autoPairBracket: true,
-  autoPairMarkdownSyntax: true,
-  autoPairQuote: true,
-  trimUnnecessaryCodeBlockEmptyLines: true,
-  codeBlockLineNumbers: false,
-  sequenceTheme: 'hand-drawn',
-  mermaidTheme: 'dark',
-  hideQuickInsertHint: false,
-  hideLinkPopup: false,
-  autoCheck: false,
-  listIndentation: 1,
-  tabSize: 4
-}
+  ...getMuyaOptions()
+})
 
 onMounted(() => {
+  // Apply theme on component mount
+  applyTheme()
+  
   if (editorContainer.value) {
     try {
-      // Initialize the muya editor
-      muya = new Muya(editorContainer.value, defaultOptions)
+      // Initialize the muya editor with current settings
+      muya = new Muya(editorContainer.value, getInitialOptions())
       
       // Initialize the editor
       muya.init()
@@ -100,6 +85,24 @@ onMounted(() => {
     }
   }
 })
+
+// Watch for settings changes and update the editor
+watch(
+  () => settings,
+  () => {
+    applyTheme()
+    if (muya) {
+      // Simple approach: just update options without trying to refresh
+      const newOptions = getMuyaOptions()
+      Object.keys(newOptions).forEach(key => {
+        if (muya.options && muya.options[key] !== newOptions[key]) {
+          muya.options[key] = newOptions[key]
+        }
+      })
+    }
+  },
+  { deep: true }
+)
 
 onUnmounted(() => {
   if (muya) {
@@ -134,12 +137,11 @@ defineExpose({
   border: none;
   border-radius: 0;
   padding: 20px;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-  font-size: 16px;
-  line-height: 1.6;
-  background: #1a1a1a;
-  color: #ffffff;
+  font-family: var(--editor-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif);
+  font-size: var(--editor-font-size, 16px);
+  line-height: var(--editor-line-height, 1.6);
+  background: var(--color-background);
+  color: var(--color-text);
   outline: none;
   box-sizing: border-box;
 }
