@@ -45,7 +45,7 @@ const defaultOptions = {
   fontSize: 16,
   lineHeight: 1.6,
   focusMode: false,
-  theme: 'light',
+  theme: 'dark',
   spellcheckEnabled: true,
   bulletListMarker: '-',
   orderListMarker: '.',
@@ -56,7 +56,7 @@ const defaultOptions = {
   trimUnnecessaryCodeBlockEmptyLines: true,
   codeBlockLineNumbers: false,
   sequenceTheme: 'hand-drawn',
-  mermaidTheme: 'default',
+  mermaidTheme: 'dark',
   hideQuickInsertHint: false,
   hideLinkPopup: false,
   autoCheck: false,
@@ -120,46 +120,32 @@ defineExpose({
 <style scoped>
 .markdown-editor-container {
   width: 100%;
-  height: 100%;
-  min-height: 500px;
+  height: 100vh;
   position: relative;
-  padding: 20px;
+  padding: 0;
+  margin: 0;
   box-sizing: border-box;
+  background: #1a1a1a;
 }
 
 .muya-editor {
   width: 100%;
-  height: 100%;
-  min-height: 500px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
+  height: 100vh;
+  border: none;
+  border-radius: 0;
   padding: 20px;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   font-size: 16px;
   line-height: 1.6;
-  background: #fff;
-  color: #333;
+  background: #1a1a1a;
+  color: #ffffff;
   outline: none;
   box-sizing: border-box;
 }
 
 .muya-editor:focus {
-  border-color: #4CAF50;
-  box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2);
-}
-
-/* Dark mode support */
-@media (prefers-color-scheme: dark) {
-  .muya-editor {
-    background: #1e1e1e;
-    color: #d4d4d4;
-    border-color: #444;
-  }
-  
-  .muya-editor:focus {
-    border-color: #4CAF50;
-    box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.3);
-  }
+  border: none;
+  box-shadow: none;
 }
 </style>
