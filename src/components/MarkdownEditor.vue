@@ -189,16 +189,19 @@ defineExpose({
 .markdown-editor-container {
   width: 100%;
   height: 100vh;
+  max-width: 100vw;
   position: relative;
   padding: 0;
   margin: 0;
   box-sizing: border-box;
   background: #1a1a1a;
+  overflow-x: hidden;
 }
 
 .muya-editor {
   width: 100%;
   height: 100vh;
+  max-width: 100%;
   border: none;
   border-radius: 0;
   padding: 20px;

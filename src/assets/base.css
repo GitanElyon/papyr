@@ -50,6 +50,11 @@
   }
 }
 
+html {
+  overflow-x: hidden;
+  overscroll-behavior: none;
+}
+
 *,
 *::before,
 *::after {
@@ -83,6 +88,8 @@ body {
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  overscroll-behavior: none;
 }
 
 /* Global text selection styling */
