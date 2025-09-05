@@ -89,30 +89,6 @@ const scrollToCursor = (cursorRect) => {
 
 }
 
-const defaultOptions = {
-  markdown: '# Welcome to Papyr\n\nStart writing your markdown here...\n\n## Features\n\n- **Bold text**\n- *Italic text*\n- [Links](https://example.com)\n- `Code snippets`\n\n```javascript\nfunction hello() {\n  console.log("Hello World!");\n}\n```\n\n> This is a blockquote\n\n1. Ordered list item 1\n2. Ordered list item 2\n\n- Unordered list item\n- Another item\n',
-  fontSize: 16,
-  lineHeight: 1.6,
-  focusMode: false,
-  theme: 'dark',
-  spellcheckEnabled: true,
-  bulletListMarker: '-',
-  orderListMarker: '.',
-  preferLooseListItem: true,
-  autoPairBracket: true,
-  autoPairMarkdownSyntax: true,
-  autoPairQuote: true,
-  trimUnnecessaryCodeBlockEmptyLines: true,
-  codeBlockLineNumbers: false,
-  sequenceTheme: 'hand-drawn',
-  mermaidTheme: 'dark',
-  hideQuickInsertHint: false,
-  hideLinkPopup: false,
-  autoCheck: false,
-  listIndentation: 1,
-  tabSize: 4
-}
-
 const getInitialOptions = () => ({
   markdown: '# Welcome to Papyr\n\nStart writing your markdown here...\n\n## Features\n\n- **Bold text**\n- *Italic text*\n- [Links](https://example.com)\n- `Code snippets`\n\n```javascript\nfunction hello() {\n  console.log("Hello World!");\n}\n```\n\n> This is a blockquote\n\n1. Ordered list item 1\n2. Ordered list item 2\n\n- Unordered list item\n- Another item\n',
   ...getMuyaOptions()
@@ -234,6 +210,7 @@ defineExpose({
   outline: none;
   box-sizing: border-box;
   overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .muya-editor:focus {
@@ -292,5 +269,27 @@ defineExpose({
 .muya-editor :deep(.muya-paragraph-front),
 .muya-editor :deep(.muya-paragraph-front span) {
   color: var(--color-text) !important;
+}
+
+/* Make markdown syntax characters less prominent */
+.muya-editor :deep(.mu-hide),
+.muya-editor :deep(.mu-remove),
+.muya-editor :deep(span.mu-hide),
+.muya-editor :deep(span.mu-remove) {
+  opacity: 0.3 !important;
+  color: var(--color-text) !important;
+  transition: opacity 0.2s ease;
+}
+
+/* Show syntax characters more prominently on hover for editing */
+.muya-editor :deep(.mu-content:hover .mu-hide),
+.muya-editor :deep(.mu-content:hover .mu-remove) {
+  opacity: 0.6 !important;
+}
+
+/* Fix inline code styling to match theme text color */
+.muya-editor :deep(code.mu-inline-rule) {
+  color: var(--color-text) !important;
+  background-color: transparent !important;
 }
 </style>
