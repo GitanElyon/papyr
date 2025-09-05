@@ -23,3 +23,131 @@ a,
     background-color: hsla(160, 100%, 37%, 0.2);
   }
 }
+
+/* Enhanced Muya Quick Insert Menu Styling */
+.mu-quick-insert.mu-float-container {
+  background: rgba(26, 26, 26, 0.85) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4) !important;
+  overflow: hidden !important;
+  position: fixed !important;
+  max-width: 400px !important;
+  z-index: 9999 !important;
+  max-height: 70vh !important;
+  overflow-y: auto !important;
+}
+
+/* Fix positioning to prevent layout sliding - position it fixed to avoid affecting editor layout */
+.mu-quick-insert.mu-float-container {
+  transform: none !important;
+  left: auto !important;
+  right: 20px !important;
+  top: 20px !important;
+  position: fixed !important;
+}
+
+/* Style quick insert menu items */
+.mu-quick-insert .item {
+  background: transparent !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+  transition: background-color 0.2s ease !important;
+  padding: 12px 16px !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+}
+
+.mu-quick-insert .item:hover,
+.mu-quick-insert .item.active {
+  background: rgba(255, 255, 255, 0.05) !important;
+}
+
+.mu-quick-insert .item:last-child {
+  border-bottom: none !important;
+}
+
+/* Style quick insert menu text */
+.mu-quick-insert .item .big-title {
+  color: var(--color-text) !important;
+  font-weight: 500 !important;
+}
+
+.mu-quick-insert .item .short-cut span {
+  color: rgba(255, 255, 255, 0.5) !important;
+  font-size: 12px !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+  padding: 2px 6px !important;
+  border-radius: 4px !important;
+}
+
+/* Style quick insert menu section headers */
+.mu-quick-insert .title {
+  background: rgba(255, 255, 255, 0.03) !important;
+  color: rgba(255, 255, 255, 0.7) !important;
+  font-weight: 600 !important;
+  font-size: 11px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  padding: 8px 16px !important;
+  margin: 0 !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+  position: sticky !important;
+  top: 0 !important;
+}
+
+/* Style icons in menu */
+.mu-quick-insert .icon-container {
+  width: 20px !important;
+  height: 20px !important;
+  flex-shrink: 0 !important;
+}
+
+.mu-quick-insert .icon {
+  opacity: 0.8 !important;
+}
+
+/* Ensure editor content doesn't get pushed by the menu */
+.mu-show-quick-insert-hint .muya-editor {
+  transform: none !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+
+/* Fix for layout sliding - prevent the editor from being affected */
+.muya-editor.mu-show-quick-insert-hint {
+  margin: 0 !important;
+  transform: none !important;
+}
+
+/* Handle the "Type / to insert" text - only show on first empty paragraph */
+.muya-editor .mu-paragraph .mu-gray,
+.muya-editor .mu-paragraph .mu-inline-rule {
+  color: rgba(255, 255, 255, 0.3) !important;
+  font-style: italic !important;
+}
+
+/* Hide the hint text on subsequent paragraphs */
+.muya-editor .mu-paragraph:not(:first-of-type) .mu-gray {
+  display: none !important;
+}
+
+/* Enhanced Settings Modal Styling */
+.settings-modal {
+  background: rgba(26, 26, 26, 0.85) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 16px !important;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.5) !important;
+  overflow: hidden !important;
+}
+
+.settings-overlay {
+  background: rgba(0, 0, 0, 0.6) !important;
+  backdrop-filter: blur(4px) !important;
+  -webkit-backdrop-filter: blur(4px) !important;
+}
