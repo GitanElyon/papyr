@@ -209,11 +209,7 @@ defineExpose({
   box-shadow: none;
 }
 
-/* Override Muya's default text colors and formatting */
-.muya-editor :deep(*) {
-  color: #ffffff !important;
-}
-
+/* Override Muya's default text colors and formatting for normal text elements only */
 .muya-editor :deep(strong) {
   font-weight: 700 !important;
   color: #ffffff !important;
@@ -236,9 +232,7 @@ defineExpose({
 
 .muya-editor :deep(p),
 .muya-editor :deep(li),
-.muya-editor :deep(blockquote),
-.muya-editor :deep(code),
-.muya-editor :deep(pre) {
+.muya-editor :deep(blockquote) {
   color: #ffffff !important;
 }
 
