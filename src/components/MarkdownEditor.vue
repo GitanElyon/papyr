@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, watch } from 'vue'
 import {
   Muya,
   EmojiSelector,
@@ -22,6 +22,7 @@ import {
   PreviewToolBar,
 } from '@muyajs/core'
 import '@muyajs/core/lib/style.css'
+import { settings, getMuyaOptions, applyTheme } from '../stores/settings.js'
 
 // Use muya plugins
 Muya.use(EmojiSelector)
@@ -85,6 +86,7 @@ const scrollToCursor = (cursorRect) => {
     // Cursor is below visible area, scroll down  
     container.scrollBy(0, cursorBottom - (containerBottom - scrollBuffer))
   }
+
 }
 
 const defaultOptions = {
@@ -111,11 +113,19 @@ const defaultOptions = {
   tabSize: 4
 }
 
+const getInitialOptions = () => ({
+  markdown: '# Welcome to Papyr\n\nStart writing your markdown here...\n\n## Features\n\n- **Bold text**\n- *Italic text*\n- [Links](https://example.com)\n- `Code snippets`\n\n```javascript\nfunction hello() {\n  console.log("Hello World!");\n}\n```\n\n> This is a blockquote\n\n1. Ordered list item 1\n2. Ordered list item 2\n\n- Unordered list item\n- Another item\n',
+  ...getMuyaOptions()
+})
+
 onMounted(() => {
+  // Apply theme on component mount
+  applyTheme()
+  
   if (editorContainer.value) {
     try {
-      // Initialize the muya editor
-      muya = new Muya(editorContainer.value, defaultOptions)
+      // Initialize the muya editor with current settings
+      muya = new Muya(editorContainer.value, getInitialOptions())
       
       // Initialize the editor
       muya.init()
@@ -123,10 +133,13 @@ onMounted(() => {
       // Set up event listeners
       muya.on('change', (changes) => {
         console.log('Editor content changed:', changes)
+        // Handle cursor position tracking and scrolling
+        setTimeout(handleCursorMovement, 10)
       })
       
       muya.on('focus', () => {
         console.log('Editor focused')
+        setTimeout(handleCursorMovement, 50)
       })
       
       muya.on('blur', () => {
@@ -137,6 +150,7 @@ onMounted(() => {
         console.log('Selection changed:', changes)
         // Handle cursor position tracking and scrolling
         setTimeout(handleCursorMovement, 10) // Small delay to ensure DOM is updated
+
       })
       
       // Add additional event listeners for comprehensive cursor tracking
@@ -147,6 +161,7 @@ onMounted(() => {
       // Also listen to focus events
       muya.on('focus', () => {
         setTimeout(handleCursorMovement, 50)
+
       })
       
       // Focus the editor after initialization
@@ -159,6 +174,24 @@ onMounted(() => {
     }
   }
 })
+
+// Watch for settings changes and update the editor
+watch(
+  () => settings,
+  () => {
+    applyTheme()
+    if (muya) {
+      // Simple approach: just update options without trying to refresh
+      const newOptions = getMuyaOptions()
+      Object.keys(newOptions).forEach(key => {
+        if (muya.options && muya.options[key] !== newOptions[key]) {
+          muya.options[key] = newOptions[key]
+        }
+      })
+    }
+  },
+  { deep: true }
+)
 
 onUnmounted(() => {
   if (muya) {
@@ -193,12 +226,11 @@ defineExpose({
   border: none;
   border-radius: 0;
   padding: 20px;
-  font-family: 'Helvetica', 'Helvetica Neue', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', sans-serif;
-  font-size: 16px;
-  line-height: 1.6;
-  background: #1a1a1a;
-  color: #ffffff;
+  font-family: var(--editor-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif);
+  font-size: var(--editor-font-size, 16px);
+  line-height: var(--editor-line-height, 1.6);
+  background: var(--color-background);
+  color: var(--color-text);
   outline: none;
   box-sizing: border-box;
   overflow-y: auto;
@@ -209,15 +241,36 @@ defineExpose({
   box-shadow: none;
 }
 
+/* Apply selection color to text selection */
+.muya-editor ::selection {
+  background-color: var(--color-selection, #3b82f6);
+  color: var(--color-text);
+}
+
+.muya-editor ::-moz-selection {
+  background-color: var(--color-selection, #3b82f6);
+  color: var(--color-text);
+}
+
+/* Apply paragraph spacing */
+.muya-editor p {
+  margin-bottom: var(--editor-paragraph-spacing, 16px);
+}
+
+/* Also apply to Muya-specific paragraph elements */
+.muya-editor .ag-paragraph {
+  margin-bottom: var(--editor-paragraph-spacing, 16px);
+}
+
 /* Override Muya's default text colors and formatting for normal text elements only */
 .muya-editor :deep(strong) {
   font-weight: 700 !important;
-  color: #ffffff !important;
+  color: var(--color-text) !important;
 }
 
 .muya-editor :deep(em) {
   font-style: italic !important;
-  color: #ffffff !important;
+  color: var(--color-text) !important;
 }
 
 .muya-editor :deep(h1),
@@ -226,18 +279,18 @@ defineExpose({
 .muya-editor :deep(h4),
 .muya-editor :deep(h5),
 .muya-editor :deep(h6) {
-  color: #ffffff !important;
+  color: var(--color-text) !important;
   font-weight: bold !important;
 }
 
 .muya-editor :deep(p),
 .muya-editor :deep(li),
 .muya-editor :deep(blockquote) {
-  color: #ffffff !important;
+  color: var(--color-text) !important;
 }
 
 .muya-editor :deep(.muya-paragraph-front),
 .muya-editor :deep(.muya-paragraph-front span) {
-  color: #ffffff !important;
+  color: var(--color-text) !important;
 }
 </style>
