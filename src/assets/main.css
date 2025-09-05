@@ -33,20 +33,10 @@ a,
   border-radius: 12px !important;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4) !important;
   overflow: hidden !important;
-  position: fixed !important;
   max-width: 400px !important;
   z-index: 9999 !important;
   max-height: 70vh !important;
   overflow-y: auto !important;
-}
-
-/* Fix positioning to prevent layout sliding - position it fixed to avoid affecting editor layout */
-.mu-quick-insert.mu-float-container {
-  transform: none !important;
-  left: auto !important;
-  right: 20px !important;
-  top: 20px !important;
-  position: fixed !important;
 }
 
 /* Style quick insert menu items */
@@ -150,4 +140,81 @@ a,
   background: rgba(0, 0, 0, 0.6) !important;
   backdrop-filter: blur(4px) !important;
   -webkit-backdrop-filter: blur(4px) !important;
+}
+
+/* Enhanced Text Selection Menu Styling */
+.mu-format-picker.mu-float-container {
+  background: rgba(26, 26, 26, 0.85) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4) !important;
+  overflow: hidden !important;
+  z-index: 9999 !important;
+}
+
+.mu-format-picker .item {
+  background: transparent !important;
+  border-right: 1px solid rgba(255, 255, 255, 0.05) !important;
+  transition: background-color 0.2s ease !important;
+  padding: 8px 12px !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.mu-format-picker .item:hover,
+.mu-format-picker .item.active {
+  background: rgba(255, 255, 255, 0.05) !important;
+}
+
+.mu-format-picker .item:last-child {
+  border-right: none !important;
+}
+
+.mu-format-picker .icon {
+  opacity: 0.8 !important;
+  color: var(--color-text) !important;
+}
+
+/* Light theme adjustments */
+[data-theme="light"] .mu-quick-insert.mu-float-container,
+[data-theme="light"] .mu-format-picker.mu-float-container {
+  background: rgba(255, 255, 255, 0.85) !important;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1) !important;
+}
+
+[data-theme="light"] .mu-quick-insert .item {
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
+}
+
+[data-theme="light"] .mu-quick-insert .item:hover,
+[data-theme="light"] .mu-quick-insert .item.active,
+[data-theme="light"] .mu-format-picker .item:hover,
+[data-theme="light"] .mu-format-picker .item.active {
+  background: rgba(0, 0, 0, 0.05) !important;
+}
+
+[data-theme="light"] .mu-quick-insert .item .short-cut span {
+  color: rgba(0, 0, 0, 0.5) !important;
+  background: rgba(0, 0, 0, 0.1) !important;
+}
+
+[data-theme="light"] .mu-quick-insert .title {
+  background: rgba(0, 0, 0, 0.03) !important;
+  color: rgba(0, 0, 0, 0.7) !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05) !important;
+}
+
+[data-theme="light"] .mu-format-picker .item {
+  border-right: 1px solid rgba(0, 0, 0, 0.05) !important;
+}
+
+[data-theme="light"] .settings-modal {
+  background: rgba(255, 255, 255, 0.85) !important;
+  border: 1px solid rgba(0, 0, 0, 0.1) !important;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.2) !important;
 }
