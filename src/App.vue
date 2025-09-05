@@ -12,6 +12,7 @@ import { RouterView } from 'vue-router'
 #app {
   width: 100%;
   height: 100vh;
+  max-width: 100vw;
   margin: 0;
   padding: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -20,6 +21,7 @@ import { RouterView } from 'vue-router'
   -moz-osx-font-smoothing: grayscale;
   background: #1a1a1a;
   color: #ffffff;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: hidden;
 }
 </style>

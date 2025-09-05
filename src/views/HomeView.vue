@@ -23,7 +23,9 @@ const toggleSettings = () => {
 .home-view {
   width: 100%;
   height: 100vh;
+  max-width: 100vw;
   padding: 0;
   margin: 0;
+  overflow-x: hidden;
 }
 </style>
