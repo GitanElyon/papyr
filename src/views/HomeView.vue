@@ -1,9 +1,9 @@
 <script setup>
-import MarkdownEditor from '../components/MarkdownEditor.vue'
+import TheWelcome from '../components/TheWelcome.vue'
 </script>
 
 <template>
   <main>
-    <MarkdownEditor />
+    <TheWelcome />
   </main>
 </template>
