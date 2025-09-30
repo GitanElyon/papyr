@@ -11,5 +11,10 @@
   "devDependencies": {
     "typescript": "~5.8.3",
     "vite": "^7.1.6"
+  },
+  "dependencies": {
+    "@codemirror/highlight": "github:codemirror/highlight",
+    "@codemirror/lang-markdown": "github:codemirror/lang-markdown",
+    "codemirror": "^6.0.2"
   }
 }
