@@ -1,5 +1,7 @@
 # Overview
 
+> **Pre-Alpha Notice:** This project is in its early stages of development. The API and features are subject to change as we refine and expand the library. Feedback and contributions are welcome!
+
 Papyr is a javascript library for building easily customizable and extensible rich text markdown editors. It is built on top of [CodeMirror 6](https://codemirror.net/6/) and [lang-markdown](https://github.com/codemirror/lang-markdown) and provides a set of default extensions and tools to painlessly implement a real time single panel WYSIWYG markdown editor in any web application.
 
 The goal of papyr is to provide a simple way for developers to implement a single-panel customizable obsidian-like markdown editor which can be easily used as a drop-in editor similar to tiptap or milkdown--the difference being that papyr uses real markdown as the source.
@@ -9,7 +11,7 @@ TLDR: papyr is a drop-in markdown editor similar to tiptap or milkdown, but uses
 ## Installation
 
 ```bash
-npm install papyr
+npm install @gitanelyon/papyr # not published yet
 ```
 
 ## Features
@@ -36,7 +38,24 @@ const editor = new Papyr({
 Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## License
-MIT License - see [LICENSE](./LICENSE) file for details.
+MIT License - see [LICENSE](./LICENSE.txt) file for details.
+
+# Developerment
+
+To run the development server:
+
+```bash
+npm run dev
+```
+
+To build the library and run the test environment:
+
+```bash
+npm run build:watch # in one terminal
+cd test && npx vite # in another terminal
+```
+
+Then open `http://localhost:5173` in your browser.
 
 # Developers Note
 

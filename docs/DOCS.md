@@ -20,6 +20,7 @@ const editor = new Papyr({
     readOnly: false,           // Make editor read-only (default: false)
     placeholder: 'Start typing...', // Placeholder text (default: '')
     autoPair: true,            // Auto-close brackets, quotes, syntax (default: true)
+    tabSize: 2,                // Number of spaces per tab (default: 2)
   },
   
   // CommonMark syntax elements (all enabled by default)
@@ -87,9 +88,6 @@ const editor = new Papyr({
 
   // theme just loads predefined CSS variables
   theme: 'default',
-  
-  // Tab size (default: 2)
-  tabSize: 2,
   
   // Additional CodeMirror 6 extensions
   extensions: [

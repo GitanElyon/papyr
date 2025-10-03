@@ -4,16 +4,17 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite test",
     "build": "tsc && vite build",
+    "build:watch": "vite build --watch",
     "preview": "vite preview"
   },
   "devDependencies": {
+    "@types/node": "^24.6.2",
     "typescript": "~5.8.3",
     "vite": "^7.1.6"
   },
   "dependencies": {
-    "@codemirror/highlight": "github:codemirror/highlight",
     "@codemirror/lang-markdown": "github:codemirror/lang-markdown",
     "codemirror": "^6.0.2"
   }

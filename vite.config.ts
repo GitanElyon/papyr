@@ -4,7 +4,7 @@ export default defineConfig({
   plugins: [],
   build: {
     lib: {
-      entry: 'src/index.ts',
+      entry: 'src/core/index.ts',
       name: 'papyr',
       fileName: (format) => `papyr.${format}.js`,
     },
