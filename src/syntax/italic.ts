@@ -8,12 +8,11 @@ import {
 } from "@codemirror/view";
 import { type Extension, RangeSetBuilder } from "@codemirror/state";
 
-export const strikethrough = (options: { hidden?: boolean, thickness?: string } = {}): Extension => {
-  const { hidden = true, thickness } = options;
+export const italic = (options: { hidden?: boolean } = {}): Extension => {
+  const { hidden = true } = options;
 
-  const styleAttributes = thickness ? { style: `text-decoration-thickness: ${thickness}` } : undefined;
-  const contentMark = Decoration.mark({ class: "cm-strikethrough", attributes: styleAttributes });
-  const formattingMark = Decoration.mark({ class: "cm-strikethrough cm-formatting", attributes: styleAttributes });
+  const contentMark = Decoration.mark({ class: "cm-italic" });
+  const formattingMark = Decoration.mark({ class: "cm-italic cm-formatting" });
 
   return ViewPlugin.fromClass(
     class {
@@ -35,8 +34,8 @@ export const strikethrough = (options: { hidden?: boolean, thickness?: string } 
             tree.iterate({
                 from, to,
                 enter: (node) => {
-                    if (node.name === "Strikethrough") {
-                        const delimiterLen = 2;
+                    if (node.name === "Emphasis") {
+                        const delimiterLen = 1;
                         
                         const start = node.from;
                         const end = node.to;

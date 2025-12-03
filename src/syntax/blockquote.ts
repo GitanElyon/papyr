@@ -8,12 +8,11 @@ import {
 } from "@codemirror/view";
 import { type Extension, RangeSetBuilder } from "@codemirror/state";
 
-export const strikethrough = (options: { hidden?: boolean, thickness?: string } = {}): Extension => {
-  const { hidden = true, thickness } = options;
+export const blockquote = (options: { hidden?: boolean } = {}): Extension => {
+  const { hidden = true } = options;
 
-  const styleAttributes = thickness ? { style: `text-decoration-thickness: ${thickness}` } : undefined;
-  const contentMark = Decoration.mark({ class: "cm-strikethrough", attributes: styleAttributes });
-  const formattingMark = Decoration.mark({ class: "cm-strikethrough cm-formatting", attributes: styleAttributes });
+  const contentMark = Decoration.line({ class: "cm-blockquote" });
+  const formattingMark = Decoration.mark({ class: "cm-blockquote-marker cm-formatting" });
 
   return ViewPlugin.fromClass(
     class {
@@ -35,19 +34,16 @@ export const strikethrough = (options: { hidden?: boolean, thickness?: string } 
             tree.iterate({
                 from, to,
                 enter: (node) => {
-                    if (node.name === "Strikethrough") {
-                        const delimiterLen = 2;
-                        
+                    if (node.name === "QuoteMark") {
                         const start = node.from;
                         const end = node.to;
-                        const contentStart = start + delimiterLen;
-                        const contentEnd = end - delimiterLen;
+                        const line = view.state.doc.lineAt(start);
                         
                         // Check overlap
                         let overlaps = false;
                         if (hidden) {
                             for (const range of ranges) {
-                                if (range.from <= end && range.to >= start) {
+                                if (range.from <= line.to && range.to >= line.from) {
                                     overlaps = true;
                                     break;
                                 }
@@ -55,17 +51,15 @@ export const strikethrough = (options: { hidden?: boolean, thickness?: string } 
                         }
                         
                         if (hidden && !overlaps) {
-                            builder.add(start, contentStart, Decoration.replace({}));
-                            if (contentStart < contentEnd) {
-                                builder.add(contentStart, contentEnd, contentMark);
-                            }
-                            builder.add(contentEnd, end, Decoration.replace({}));
+                            // Apply blockquote style to the whole line
+                            builder.add(line.from, line.from, contentMark);
+                            // Hide the > marker
+                            builder.add(start, end, Decoration.replace({}));
                         } else {
-                            builder.add(start, contentStart, formattingMark);
-                            if (contentStart < contentEnd) {
-                                builder.add(contentStart, contentEnd, contentMark);
-                            }
-                            builder.add(contentEnd, end, formattingMark);
+                            // Apply blockquote style to the whole line
+                            builder.add(line.from, line.from, contentMark);
+                            // Show the > marker with formatting style
+                            builder.add(start, end, formattingMark);
                         }
                     }
                 }

@@ -8,12 +8,11 @@ import {
 } from "@codemirror/view";
 import { type Extension, RangeSetBuilder } from "@codemirror/state";
 
-export const strikethrough = (options: { hidden?: boolean, thickness?: string } = {}): Extension => {
-  const { hidden = true, thickness } = options;
+export const inlineCode = (options: { hidden?: boolean } = {}): Extension => {
+  const { hidden = true } = options;
 
-  const styleAttributes = thickness ? { style: `text-decoration-thickness: ${thickness}` } : undefined;
-  const contentMark = Decoration.mark({ class: "cm-strikethrough", attributes: styleAttributes });
-  const formattingMark = Decoration.mark({ class: "cm-strikethrough cm-formatting", attributes: styleAttributes });
+  const contentMark = Decoration.mark({ class: "cm-inline-code" });
+  const formattingMark = Decoration.mark({ class: "cm-inline-code cm-formatting" });
 
   return ViewPlugin.fromClass(
     class {
@@ -35,9 +34,16 @@ export const strikethrough = (options: { hidden?: boolean, thickness?: string } 
             tree.iterate({
                 from, to,
                 enter: (node) => {
-                    if (node.name === "Strikethrough") {
-                        const delimiterLen = 2;
+                    if (node.name === "InlineCode") {
+                        const nodeText = view.state.sliceDoc(node.from, node.to);
+                        let delimiterLen = 0;
+                        for(let i=0; i<nodeText.length; i++) {
+                            if(nodeText[i] === '`') delimiterLen++;
+                            else break;
+                        }
                         
+                        if (delimiterLen === 0) return;
+
                         const start = node.from;
                         const end = node.to;
                         const contentStart = start + delimiterLen;

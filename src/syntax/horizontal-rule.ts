@@ -8,12 +8,14 @@ import {
 } from "@codemirror/view";
 import { type Extension, RangeSetBuilder } from "@codemirror/state";
 
-export const strikethrough = (options: { hidden?: boolean, thickness?: string } = {}): Extension => {
-  const { hidden = true, thickness } = options;
+export const horizontalRule = (options: { hidden?: boolean } = {}): Extension => {
+  const { hidden = true } = options;
 
-  const styleAttributes = thickness ? { style: `text-decoration-thickness: ${thickness}` } : undefined;
-  const contentMark = Decoration.mark({ class: "cm-strikethrough", attributes: styleAttributes });
-  const formattingMark = Decoration.mark({ class: "cm-strikethrough cm-formatting", attributes: styleAttributes });
+  const hrWidget = Decoration.line({
+    class: "cm-hr"
+  });
+  
+  const formattingMark = Decoration.mark({ class: "cm-hr-marker cm-formatting" });
 
   return ViewPlugin.fromClass(
     class {
@@ -35,13 +37,10 @@ export const strikethrough = (options: { hidden?: boolean, thickness?: string } 
             tree.iterate({
                 from, to,
                 enter: (node) => {
-                    if (node.name === "Strikethrough") {
-                        const delimiterLen = 2;
-                        
+                    if (node.name === "HorizontalRule") {
                         const start = node.from;
                         const end = node.to;
-                        const contentStart = start + delimiterLen;
-                        const contentEnd = end - delimiterLen;
+                        const line = view.state.doc.lineAt(start);
                         
                         // Check overlap
                         let overlaps = false;
@@ -55,17 +54,13 @@ export const strikethrough = (options: { hidden?: boolean, thickness?: string } 
                         }
                         
                         if (hidden && !overlaps) {
-                            builder.add(start, contentStart, Decoration.replace({}));
-                            if (contentStart < contentEnd) {
-                                builder.add(contentStart, contentEnd, contentMark);
-                            }
-                            builder.add(contentEnd, end, Decoration.replace({}));
+                            // And apply the line decoration which will render the HR
+                            builder.add(line.from, line.from, hrWidget);
+                            // Replace the entire line content with nothing (effectively hiding the text)
+                            builder.add(start, end, Decoration.replace({}));
                         } else {
-                            builder.add(start, contentStart, formattingMark);
-                            if (contentStart < contentEnd) {
-                                builder.add(contentStart, contentEnd, contentMark);
-                            }
-                            builder.add(contentEnd, end, formattingMark);
+                            // Show the text with formatting style
+                            builder.add(start, end, formattingMark);
                         }
                     }
                 }
