@@ -1,7 +1,10 @@
-import { EditorView } from '@codemirror/view'
+import {
+  EditorView,
+ } from '@codemirror/view'
 import { basicSetup } from 'codemirror'
 import { EditorState } from '@codemirror/state'
 import { markdown } from '@codemirror/lang-markdown'
+import '../style.css'
 
 export interface PapyrConfig {
   parent: HTMLElement
@@ -28,16 +31,17 @@ export interface PapyrConfig {
 
 export class Papyr {
   private view: EditorView
-  private config: PapyrConfig
 
   constructor(config: PapyrConfig) {
-    this.config = config
-    
     const extensions = [
       basicSetup,
       markdown(),
     ]
-0
+
+    if (config.extensions) {
+      extensions.push(...config.extensions)
+    }
+
     if (config.onChange) {
       extensions.push(
         EditorView.updateListener.of((update) => {
