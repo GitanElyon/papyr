@@ -1,0 +1,132 @@
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  margin: 0;
+  padding: 2rem;
+  background-color: #f0f0f0;
+  display: flex;
+  justify-content: center;
+  min-height: 100vh;
+  color: #2e3338;
+}
+
+#editor {
+  width: 100%;
+  max-width: 800px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+  min-height: 500px;
+  display: flex;
+  flex-direction: column;
+}
+
+.cm-editor {
+  height: 100%;
+  min-height: 500px;
+  font-size: 16px;
+}
+
+.cm-scroller {
+  font-family: 'Inter', sans-serif;
+  line-height: 1.6;
+  padding: 3rem 4rem;
+}
+
+.cm-content {
+  max-width: 100%;
+}
+
+.cm-line {
+  padding: 0.2em 0;
+}
+
+.cm-header {
+  font-weight: 600;
+  color: #2e3338;
+  line-height: 1.3;
+  padding-top: 1em;
+  padding-bottom: 0.2em;
+  margin: 0;
+}
+
+.cm-header-1 { font-size: 2em; }
+.cm-header-2 { font-size: 1.8em; }
+.cm-header-3 { font-size: 1.6em; }
+.cm-header-4 { font-size: 1.4em; }
+.cm-header-5 { font-size: 1.2em; }
+.cm-header-6 { font-size: 1em; color: #5c5c5c; }
+
+.cm-bold { font-weight: 600; color: #2e3338; }
+.cm-italic { font-style: italic; }
+.cm-strikethrough { text-decoration: line-through; color: #999; }
+
+.cm-link { color: #705dcf; text-decoration: none; cursor: pointer; }
+.cm-link:hover { text-decoration: underline; }
+
+.cm-inline-code {
+  font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+  background-color: #eff1f2;
+  color: #000000;
+  padding: 0.1em 0.1em;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+.cm-blockquote {
+  border-left: 4px solid #dfe2e5;
+  color: #6a737d;
+  padding-left: 1em;
+  margin-left: 0;
+}
+
+.cm-list-mark { color: #5c5c5c; }
+
+.cm-task-checkbox {
+  margin-right: 0.5em;
+  vertical-align: middle;
+  cursor: pointer;
+}
+
+.cm-formatting {
+  color: #000000;
+}
+
+.cm-hr {
+  position: relative;
+  display: block;
+  min-height: 1.5em; /* Maintain line height */
+  margin: 0;
+  border: none;
+}
+
+.cm-hr::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: #ddd;
+  transform: translateY(-50%);
+}
+
+.cm-hr-marker {
+  color: #999;
+  font-weight: bold;
+
+}
+.cm-hr-marker {
+  color: #999;
+  font-weight: bold;
+
+}
+
+.cm-codeblock {
+  background-color: #b3b3b3;
+  border-radius: 6px;
+  padding: 1em;
+  font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
+  font-size: 0.95em;
+  overflow-x: auto;
+}

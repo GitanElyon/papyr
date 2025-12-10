@@ -31,41 +31,46 @@ export const header = (options: { hidden?: boolean } = {}): Extension => {
             tree.iterate({
                 from, to,
                 enter: (node) => {
-                    if (node.name === "ATXHeading") {
-                        const text = view.state.sliceDoc(node.from, node.to);
-                        const match = text.match(/^(#{1,6})(\s+)(.*)$/);
+                    if (node.name === "HeaderMark") {
+                        const headerMark = node;
+                        const level = headerMark.to - headerMark.from;
                         
-                        if (match) {
-                            const level = match[1].length;
-                            const start = node.from;
-                            const end = node.to;
-                            
-                            const hashesLen = match[1].length;
-                            const spaceLen = match[2].length;
-                            const contentStartAbs = start + hashesLen + spaceLen;
-                            
-                            // Check overlap
-                            let overlaps = false;
-                            if (hidden) {
-                                for (const range of ranges) {
-                                    if (range.from <= end && range.to >= start) {
-                                        overlaps = true;
-                                        break;
-                                    }
+                        // Find where the content starts (skip spaces after header mark)
+                        let prefixEnd = headerMark.to;
+                        const line = view.state.doc.lineAt(headerMark.from);
+                        
+                        while (prefixEnd < line.to) {
+                            const char = view.state.sliceDoc(prefixEnd, prefixEnd + 1);
+                            if (/[ \t]/.test(char)) {
+                                prefixEnd++;
+                            } else {
+                                break;
+                            }
+                        }
+                        
+                        const start = headerMark.from;
+                        
+                        // Check overlap
+                        let overlaps = false;
+                        if (hidden) {
+                            for (const range of ranges) {
+                                if (range.from <= line.to && range.to >= line.from) {
+                                    overlaps = true;
+                                    break;
                                 }
                             }
-                            
-                            const className = `cm-header cm-header-${level}`;
-                            const contentMark = Decoration.mark({ class: className });
-                            const formattingMark = Decoration.mark({ class: `${className} cm-formatting` });
+                        }
+                        
+                        const className = `cm-header cm-header-${level}`;
+                        const lineDeco = Decoration.line({ class: className });
+                        const formattingMark = Decoration.mark({ class: `cm-formatting` });
 
-                            if (hidden && !overlaps) {
-                                builder.add(start, contentStartAbs, Decoration.replace({}));
-                                builder.add(contentStartAbs, end, contentMark);
-                            } else {
-                                builder.add(start, contentStartAbs, formattingMark);
-                                builder.add(contentStartAbs, end, contentMark);
-                            }
+                        builder.add(line.from, line.from, lineDeco);
+
+                        if (hidden && !overlaps) {
+                            builder.add(start, prefixEnd, Decoration.replace({}));
+                        } else {
+                            builder.add(start, prefixEnd, formattingMark);
                         }
                     }
                 }

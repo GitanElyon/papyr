@@ -9,10 +9,7 @@ The project is structured to allow users to import only the core functionality o
 papyr/
 ├── src/
 │   ├── core/
-│   │   ├── index.ts              # Main Papyr class
-│   │   ├── editor.ts             # Core editor logic
-│   │   ├── config.ts             # Default configuration
-│   │   └── types.ts              # TypeScript interfaces
+│   │   ├── index.ts              # Main Papyr extension export
 │   │
 │   ├── syntax/
 │   │   ├── index.ts              # Syntax manager

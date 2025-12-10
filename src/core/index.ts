@@ -1,8 +1,5 @@
-import {
-  EditorView,
- } from '@codemirror/view'
-import { basicSetup } from 'codemirror'
-import { EditorState } from '@codemirror/state'
+import { EditorView } from '@codemirror/view'
+import type { Extension } from '@codemirror/state'
 import { markdown, markdownLanguage } from '@codemirror/lang-markdown'
 import { bold } from '../syntax/bold'
 import { italic } from '../syntax/italic'
@@ -13,144 +10,169 @@ import { blockquote } from '../syntax/blockquote'
 import { horizontalRule } from '../syntax/horizontal-rule'
 import { codeblock } from '../syntax/codeblock'
 import { lists } from '../syntax/lists'
-import '../style.css'
+import { taskList } from '../extensions/gfm/task-list'
+import { strikethrough } from '../extensions/gfm/strikethrough'
+import { autolink } from '../extensions/gfm/autolink'
+import { table } from '../extensions/gfm/table'
+// import '../style.css'
 
 export interface PapyrConfig {
-  parent: HTMLElement
-  content?: string
-  options?: {
-    lineWrapping?: boolean
-    lineNumbers?: boolean
-    spellcheck?: boolean
-    readOnly?: boolean
-    placeholder?: string
-    autoPair?: boolean
-    tabSize?: number
-  }
   syntax?: {
-    general?: { enabled?: boolean; hidden?: boolean }
-    bold?: { enabled?: boolean; hidden?: boolean }
-    italic?: { enabled?: boolean; hidden?: boolean }
-    header?: { enabled?: boolean; hidden?: boolean }
-    inlineCode?: { enabled?: boolean; hidden?: boolean }
-    link?: { enabled?: boolean; hidden?: boolean }
-    blockquote?: { enabled?: boolean; hidden?: boolean }
-    horizontalRule?: { enabled?: boolean; hidden?: boolean }
-    codeblock?: { enabled?: boolean; hidden?: boolean }
-    lists?: { enabled?: boolean; hidden?: boolean; bulletIcon?: string }
-    // others will be added later
+    bold?: boolean | { hidden?: boolean }
+    italic?: boolean | { hidden?: boolean }
+    header?: boolean | { hidden?: boolean }
+    inlineCode?: boolean | { hidden?: boolean }
+    link?: boolean | { hidden?: boolean }
+    blockquote?: boolean | { hidden?: boolean }
+    horizontalRule?: boolean | { hidden?: boolean }
+    codeblock?: boolean | { hidden?: boolean }
+    lists?: boolean | { hidden?: boolean; bulletIcon?: string }
+  }
+  extensions?: {
+    gfm?: boolean | {
+      strikethrough?: boolean | { hidden?: boolean, thickness?: string }
+      taskList?: boolean | { hidden?: boolean, disabled?: boolean, hideBullet?: boolean, bulletIcon?: string }
+      autolink?: boolean | { hidden?: boolean }
+      table?: boolean | { hidden?: boolean }
+    }
   }
   theme?: string
-  extensions?: any[]
   onChange?: (content: string) => void
 }
 
-export class Papyr {
-  private view: EditorView
+export const papyr = (config: PapyrConfig = {}): Extension => {
+  const extensions: Extension[] = [
+    markdown({ base: markdownLanguage }),
+  ]
 
-  constructor(config: PapyrConfig) {
-    const extensions = [
-      basicSetup,
-      markdown({ base: markdownLanguage }),
-    ]
+  const syntax = config.syntax || {};
+  const explicitKeys = Object.keys(syntax).filter(k => syntax[k as keyof typeof syntax] !== undefined);
+  const enableAll = explicitKeys.length === 0;
 
-    if (config.syntax?.bold?.enabled) {
-      extensions.push(bold({
-        hidden: config.syntax.bold.hidden
-      }))
-    }
-
-    if (config.syntax?.italic?.enabled) {
-      extensions.push(italic({
-        hidden: config.syntax.italic.hidden
-      }))
-    }
-
-    if (config.syntax?.header?.enabled) {
-      extensions.push(header({
-        hidden: config.syntax.header.hidden
-      }))
-    }
-
-    if (config.syntax?.inlineCode?.enabled) {
-      extensions.push(inlineCode({
-        hidden: config.syntax.inlineCode.hidden
-      }))
-    }
-
-    if (config.syntax?.link?.enabled) {
-      extensions.push(link({
-        hidden: config.syntax.link.hidden
-      }))
-    }
-
-    if (config.syntax?.blockquote?.enabled) {
-      extensions.push(blockquote({
-        hidden: config.syntax.blockquote.hidden
-      }))
-    }
-
-    if (config.syntax?.horizontalRule?.enabled) {
-      extensions.push(horizontalRule({
-        hidden: config.syntax.horizontalRule.hidden
-      }))
-    }
-
-    if (config.syntax?.codeblock?.enabled) {
-      extensions.push(codeblock({
-        hidden: config.syntax.codeblock.hidden
-      }))
-    }
-
-    if (config.syntax?.lists?.enabled) {
-      extensions.push(lists({
-        hidden: config.syntax.lists.hidden,
-        bulletIcon: config.syntax.lists.bulletIcon
-      }))
-    }
-
-    if (config.extensions) {
-      extensions.push(...config.extensions)
-    }
-
-    if (config.onChange) {
-      extensions.push(
-        EditorView.updateListener.of((update) => {
-          if (update.docChanged) {
-            config.onChange!(update.state.doc.toString())
-          }
-        })
-      )
-    }
-
-    this.view = new EditorView({
-      state: EditorState.create({
-        doc: config.content || '',
-        extensions
-      }),
-      parent: config.parent
-    })
+  const resolve = (key: keyof typeof syntax) => {
+      const val = syntax[key];
+      if (enableAll) return {}; // Enabled, default options
+      if (val === undefined || val === false) return null; // Disabled
+      if (val === true) return {}; // Enabled, default options
+      return val; // Enabled, custom options
   }
 
-  getContent(): string {
-    return this.view.state.doc.toString()
+  const boldOpts = resolve('bold');
+  if (boldOpts) {
+    extensions.push(bold(boldOpts))
   }
 
-  setContent(content: string): void {
-    this.view.dispatch({
-      changes: {
-        from: 0,
-        to: this.view.state.doc.length,
-        insert: content
+  const italicOpts = resolve('italic');
+  if (italicOpts) {
+    extensions.push(italic(italicOpts))
+  }
+
+  const headerOpts = resolve('header');
+  if (headerOpts) {
+    extensions.push(header(headerOpts))
+  }
+
+  const inlineCodeOpts = resolve('inlineCode');
+  if (inlineCodeOpts) {
+    extensions.push(inlineCode(inlineCodeOpts))
+  }
+
+  const linkOpts = resolve('link');
+  if (linkOpts) {
+    extensions.push(link(linkOpts))
+  }
+
+  const blockquoteOpts = resolve('blockquote');
+  if (blockquoteOpts) {
+    extensions.push(blockquote(blockquoteOpts))
+  }
+
+  const horizontalRuleOpts = resolve('horizontalRule');
+  if (horizontalRuleOpts) {
+    extensions.push(horizontalRule(horizontalRuleOpts))
+  }
+
+  const codeblockOpts = resolve('codeblock');
+  if (codeblockOpts) {
+    extensions.push(codeblock(codeblockOpts))
+  }
+
+  // Determine if we need to ignore task lists in the main lists extension
+  let ignoreTaskLists = false;
+  if (config.extensions?.gfm) {
+       const gfmConfig = config.extensions.gfm === true ? {} : config.extensions.gfm;
+       const taskConfig = gfmConfig.taskList;
+       if (taskConfig !== false) {
+           const opts = taskConfig === true || taskConfig === undefined ? {} : taskConfig;
+           if (opts.hideBullet || opts.bulletIcon) {
+               ignoreTaskLists = true;
+           }
+       }
+  }
+
+  const listsOpts = resolve('lists');
+  if (listsOpts) {
+    extensions.push(lists({
+      ...listsOpts,
+      ignoreTaskLists: ignoreTaskLists
+    }))
+  }
+
+  // GFM Extensions
+  if (config.extensions?.gfm) {
+      const gfmConfig = config.extensions.gfm === true ? {} : config.extensions.gfm;
+      
+      // Strikethrough
+      const strikeConfig = gfmConfig.strikethrough;
+      if (strikeConfig !== false) {
+          const opts = strikeConfig === true || strikeConfig === undefined ? {} : strikeConfig;
+          extensions.push(strikethrough({
+              hidden: opts.hidden !== false,
+              thickness: opts.thickness
+          }));
       }
-    })
+
+      // Task List
+      const taskConfig = gfmConfig.taskList;
+      if (taskConfig !== false) {
+          const opts = taskConfig === true || taskConfig === undefined ? {} : taskConfig;
+          
+          extensions.push(taskList({
+              hidden: opts.hidden !== false,
+              disabled: opts.disabled === true,
+              hideBullet: opts.hideBullet === true,
+              bulletIcon: opts.bulletIcon
+          }));
+      }
+
+      // Autolink
+      const linkConfig = gfmConfig.autolink;
+      if (linkConfig !== false) {
+          const opts = linkConfig === true || linkConfig === undefined ? {} : linkConfig;
+          extensions.push(autolink({
+              hidden: opts.hidden !== false
+          }));
+      }
+
+      // Table
+      const tableConfig = gfmConfig.table;
+      if (tableConfig !== false) {
+          const opts = tableConfig === true || tableConfig === undefined ? {} : tableConfig;
+          extensions.push(table({
+              hidden: opts.hidden !== false
+          }));
+      }
   }
 
-  focus(): void {
-    this.view.focus()
+  if (config.onChange) {
+    extensions.push(
+      EditorView.updateListener.of((update) => {
+        if (update.docChanged) {
+          config.onChange!(update.state.doc.toString())
+        }
+      })
+    )
   }
 
-  destroy(): void {
-    this.view.destroy()
-  }
+  return extensions;
 }

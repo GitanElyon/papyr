@@ -1,110 +1,95 @@
 # Configuration Reference
 
-This document provides a reference for configuring and using the Papyr markdown editor. All options below are papyr's default settings and are optional unless otherwise noted.
+This document provides a reference for configuring and using the Papyr markdown editor extension.
+
+Papyr is designed to be used as a CodeMirror 6 extension. You configure the editor itself using standard CodeMirror patterns, and configure Papyr's specific features via the `papyr()` extension function.
 
 ```typescript
-import { Papyr } from 'papyr';
+import { EditorView, basicSetup } from 'codemirror';
+import { EditorState } from '@codemirror/state';
+import { papyr } from 'papyr';
 
-const editor = new Papyr({
-  // Required: DOM element where the editor will be mounted
+const view = new EditorView({
   parent: document.getElementById('editor'),
-  
-  // Initial content (default: '')
-  content: '# Hello, Welcome to Papyr!',
-  
-  // Basic editor options
-  options: {
-    lineWrapping: true,        // Wrap long lines (default: true)
-    lineNumbers: false,        // Show line numbers (default: false)
-    spellcheck: false,         // Browser spellcheck (default: false)
-    readOnly: false,           // Make editor read-only (default: false)
-    placeholder: 'Start typing...', // Placeholder text (default: '')
-    autoPair: true,            // Auto-close brackets, quotes, syntax (default: true)
-    tabSize: 2,                // Number of spaces per tab (default: 2)
-  },
-  
-  // CommonMark syntax elements (all enabled by default)
-  syntax: {
-    // General markdown parsing, all others inherit from this
-    general: { 
-      enabled: true,    // Enable general markdown parsing (default: true)
-      hidden: false,    // Hide all markdown syntax (default: false)
-    },
+  state: EditorState.create({
+    doc: '# Hello, Welcome to Papyr!',
+    extensions: [
+      // 1. Standard CodeMirror Setup (Line numbers, keymaps, etc.)
+      basicSetup, 
+      
+      // 2. Papyr Extension
+      papyr({
+        // CommonMark syntax elements (all enabled by default)
+        syntax: {
+          // General markdown parsing
+          general: { enabled: true, hidden: false },
 
-    // Bold text (**text** or __text__)
-    bold: { 
-      enabled: true,    // Enable bold parsing (default: true)
-      hidden: false,    // Hide ** markers (default: false)
-    },
-    
-    // Italic text (*text* or _text_)
-    italic: { 
-      enabled: true,    // Enable italic parsing (default: true)
-      hidden: false,    // Hide * markers (default: false)
-    },
-    
-    // Headings (# ## ### etc.)
-    headings: { 
-      enabled: true,    // Enable heading parsing (default: true)
-      hidden: false,    // Hide # markers (default: false)
-    },
-    
-    // Links ([text](url))
-    links: {
-      enabled: true,    // Enable link parsing (default: true)
-      hidden: false,    // Hide []() syntax (default: false)
-    },
-    
-    // Lists (- item, * item, 1. item)
-    lists: {
-      enabled: true,    // Enable list parsing (default: true)
-      hidden: false,    // Hide list markers (default: false)
-    },
-    
-    // Blockquotes (> text)
-    blockquotes: {
-      enabled: true,    // Enable blockquote parsing (default: true)
-      hidden: false,    // Hide > markers (default: false)
-    },
-    
-    // Inline code (`code`)
-    inlineCode: {
-      enabled: true,    // Enable inline code parsing (default: true)
-      hidden: false,    // Hide ` markers (default: false)
-    },
-    
-    // Code blocks (```lang or indented)
-    codeBlocks: {
-      enabled: true,    // Enable code block parsing (default: true)
-      hidden: false,    // Hide ``` markers (default: false)
-    },
-    
-    // Horizontal rules (--- or ***)
-    horizontalRules: {
-      enabled: true,    // Enable HR parsing (default: true)
-      hidden: false,    // Hide --- markers (default: false)
-    }
-  },
+          // Bold text (**text** or __text__)
+          bold: { enabled: true, hidden: false },
+          
+          // Italic text (*text* or _text_)
+          italic: { enabled: true, hidden: false },
+          
+          // Headings (# ## ### etc.)
+          headings: { enabled: true, hidden: false },
+          
+          // Links ([text](url))
+          links: { enabled: true, hidden: false },
+          
+          // Lists (- item, * item, 1. item)
+          lists: { enabled: true, hidden: false },
+          
+          // Blockquotes (> text)
+          blockquotes: { enabled: true, hidden: false },
+          
+          // Inline code (`code`)
+          inlineCode: { enabled: true, hidden: false },
+          
+          // Code blocks (```lang or indented)
+          codeBlocks: { enabled: true, hidden: false },
+          
+          // Horizontal rules (--- or ***)
+          horizontalRules: { enabled: true, hidden: false }
+        },
 
-  // theme just loads predefined CSS variables
-  theme: 'default',
-  
-  // Additional CodeMirror 6 extensions
-  extensions: [
-    // Add extensions here for non-CommonMark features
-  ],
-  
-  // Content change callback
-  onChange: (content: string) => {
-    console.log('Content changed:', content);
-  }
+        // Additional Extensions (GFM)
+        extensions: {
+          gfm: {
+            strikethrough: { hidden: false, thickness: '1px' },
+            taskList: { hidden: false, disabled: false, hideBullet: false, bulletIcon: '➤' },
+            autolink: true,
+            table: true
+          }
+        },
+        
+        // Theme (loads predefined CSS variables)
+        theme: 'default',
+        
+        // Content change callback
+        onChange: (content: string) => {
+          console.log('Content changed:', content);
+        }
+      })
+    ]
+  })
 });
+```
 
-// Basic editor methods
-editor.getContent();              // Get current markdown content
-editor.setContent('# New content'); // Set content
-editor.focus();                   // Focus the editor
-editor.destroy();                 // Clean up and remove editor
+## Standard Editor Options
+
+Since Papyr is just an extension, you control standard editor features using CodeMirror's native extensions.
+
+```typescript
+import { lineNumbers, EditorView } from '@codemirror/view';
+import { EditorState } from '@codemirror/state';
+
+// ... inside extensions array:
+[
+  lineNumbers(),                    // Show line numbers
+  EditorView.lineWrapping,          // Enable line wrapping
+  EditorState.readOnly.of(true),    // Make read-only
+  EditorState.tabSize.of(4),        // Set tab size
+]
 ```
 
 # Extensions (Non-CommonMark Features)

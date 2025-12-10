@@ -9,8 +9,12 @@ import {
 } from "@codemirror/view";
 import { type Extension, RangeSetBuilder } from "@codemirror/state";
 
-class BulletWidget extends WidgetType {
-  constructor(readonly icon: string) { super(); }
+export class BulletWidget extends WidgetType {
+  icon: string;
+  constructor(icon: string) { 
+      super(); 
+      this.icon = icon;
+  }
   toDOM() {
     const span = document.createElement("span");
     span.className = "cm-list-bullet";
@@ -19,24 +23,12 @@ class BulletWidget extends WidgetType {
   }
 }
 
-class CheckboxWidget extends WidgetType {
-  constructor(readonly checked: boolean) { super(); }
-  toDOM() {
-    const input = document.createElement("input");
-    input.type = "checkbox";
-    input.checked = this.checked;
-    input.className = "cm-task-checkbox";
-    // Prevent editing via the checkbox for now
-    input.onclick = (e) => e.preventDefault(); 
-    return input;
-  }
-}
-
 export const lists = (options: { 
     hidden?: boolean, 
-    bulletIcon?: string 
+    bulletIcon?: string,
+    ignoreTaskLists?: boolean
 } = {}): Extension => {
-  const { hidden = true, bulletIcon = "•" } = options;
+  const { hidden = true, bulletIcon = "•", ignoreTaskLists = false } = options;
 
   const markClass = "cm-list-mark";
   const formattingClass = "cm-list-mark cm-formatting";
@@ -62,6 +54,17 @@ export const lists = (options: {
                 from, to,
                 enter: (node) => {
                     if (node.name === "ListMark") {
+                        // Check if it's a task list item
+                        if (ignoreTaskLists) {
+                            const parent = node.node.parent;
+                            if (parent && parent.name === "ListItem") {
+                                const taskChild = parent.getChild("Task");
+                                if (taskChild) {
+                                    return;
+                                }
+                            }
+                        }
+
                         // Check if it's a bullet or ordered list
                         const text = view.state.sliceDoc(node.from, node.to);
                         const isBullet = /^[-*+]$/.test(text);
@@ -86,28 +89,6 @@ export const lists = (options: {
                                 // Ordered list - just style it
                                 builder.add(node.from, node.to, Decoration.mark({ class: markClass }));
                             }
-                        } else {
-                            builder.add(node.from, node.to, Decoration.mark({ class: formattingClass }));
-                        }
-                    } else if (node.name === "TaskMarker") {
-                        const text = view.state.sliceDoc(node.from, node.to);
-                        const isChecked = text.includes("x") || text.includes("X");
-                        
-                         // Check overlap
-                        let overlaps = false;
-                        if (hidden) {
-                            for (const range of ranges) {
-                                if (range.from <= node.to && range.to >= node.from) {
-                                    overlaps = true;
-                                    break;
-                                }
-                            }
-                        }
-
-                        if (hidden && !overlaps) {
-                             builder.add(node.from, node.to, Decoration.replace({
-                                widget: new CheckboxWidget(isChecked)
-                            }));
                         } else {
                             builder.add(node.from, node.to, Decoration.mark({ class: formattingClass }));
                         }
