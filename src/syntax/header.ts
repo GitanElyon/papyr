@@ -67,7 +67,7 @@ export const header = (options: { hidden?: boolean } = {}): Extension => {
 
                         builder.add(line.from, line.from, lineDeco);
 
-                        if (hidden && !overlaps) {
+                        if (hidden && !overlaps && prefixEnd < line.to) {
                             builder.add(start, prefixEnd, Decoration.replace({}));
                         } else {
                             builder.add(start, prefixEnd, formattingMark);

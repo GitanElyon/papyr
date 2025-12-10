@@ -6,7 +6,7 @@ body {
   display: flex;
   justify-content: center;
   min-height: 100vh;
-  color: #2e3338;
+  color: #000000;
 }
 
 #editor {
@@ -43,7 +43,7 @@ body {
 
 .cm-header {
   font-weight: 600;
-  color: #2e3338;
+  color: #000000;
   line-height: 1.3;
   padding-top: 1em;
   padding-bottom: 0.2em;
@@ -55,11 +55,11 @@ body {
 .cm-header-3 { font-size: 1.6em; }
 .cm-header-4 { font-size: 1.4em; }
 .cm-header-5 { font-size: 1.2em; }
-.cm-header-6 { font-size: 1em; color: #5c5c5c; }
+.cm-header-6 { font-size: 1em; }
 
-.cm-bold { font-weight: 600; color: #2e3338; }
-.cm-italic { font-style: italic; }
-.cm-strikethrough { text-decoration: line-through; color: #999; }
+.cm-bold { font-weight: 600; color: #000000; }
+.cm-italic { font-style: italic; color: #000000; }
+.cm-strikethrough { text-decoration: line-through; color: #000000; }
 
 .cm-link { color: #705dcf; text-decoration: none; cursor: pointer; }
 .cm-link:hover { text-decoration: underline; }
@@ -89,7 +89,7 @@ body {
 }
 
 .cm-formatting {
-  color: #000000;
+  color: #464646;
 }
 
 .cm-hr {
@@ -129,4 +129,43 @@ body {
   font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
   font-size: 0.95em;
   overflow-x: auto;
+}
+
+/* Table Styles */
+.cm-table-line {
+  font-size: 0;
+}
+
+.cm-table-cell {
+  font-size: 1rem;
+  display: inline-block;
+  border: 1px solid #ccc;
+  padding: 8px 12px;
+  margin: 0;
+  vertical-align: middle;
+  /* Collapse borders visually */
+  margin-right: -1px;
+  margin-bottom: -1px;
+  
+  /* Consistent sizing */
+  min-width: 120px;
+  max-width: 300px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-sizing: border-box;
+}
+
+.cm-table-pipe {
+  display: none;
+}
+
+.cm-table-separator-line {
+  display: none;
+}
+
+.cm-table-header-line .cm-table-cell {
+  font-weight: bold;
+  background-color: #f0f0f0;
+  border-bottom: 2px solid #ccc;
 }

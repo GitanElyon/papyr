@@ -14,6 +14,8 @@ import { taskList } from '../extensions/gfm/task-list'
 import { strikethrough } from '../extensions/gfm/strikethrough'
 import { autolink } from '../extensions/gfm/autolink'
 import { table } from '../extensions/gfm/table'
+import {keymap} from "@codemirror/view"
+import { defaultKeymap, indentMore, indentLess } from '@codemirror/commands'
 // import '../style.css'
 
 export interface PapyrConfig {
@@ -33,7 +35,7 @@ export interface PapyrConfig {
       strikethrough?: boolean | { hidden?: boolean, thickness?: string }
       taskList?: boolean | { hidden?: boolean, disabled?: boolean, hideBullet?: boolean, bulletIcon?: string }
       autolink?: boolean | { hidden?: boolean }
-      table?: boolean | { hidden?: boolean }
+      table?: boolean | { hidden?: boolean, mode?: 'raw' | 'rich' }
     }
   }
   theme?: string
@@ -43,6 +45,19 @@ export interface PapyrConfig {
 export const papyr = (config: PapyrConfig = {}): Extension => {
   const extensions: Extension[] = [
     markdown({ base: markdownLanguage }),
+    keymap.of([
+      ...defaultKeymap,
+      {
+        key: "Tab",
+        preventDefault: true,
+        run: indentMore,
+      },
+      {
+        key: "Shift-Tab",
+        preventDefault: true,
+        run: indentLess,
+      },
+    ]),
   ]
 
   const syntax = config.syntax || {};
@@ -159,7 +174,8 @@ export const papyr = (config: PapyrConfig = {}): Extension => {
       if (tableConfig !== false) {
           const opts = tableConfig === true || tableConfig === undefined ? {} : tableConfig;
           extensions.push(table({
-              hidden: opts.hidden !== false
+              hidden: opts.hidden !== false,
+              mode: opts.mode
           }));
       }
   }

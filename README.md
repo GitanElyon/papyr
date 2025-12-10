@@ -28,7 +28,7 @@ All editor functionality is optional and can be configured when adding the exten
 ## Basic Usage
 
 ```typescript
-import { EditorView, basicSetup } from 'codemirror';
+import { EditorView, minimalSetup } from 'codemirror';
 import { EditorState } from '@codemirror/state';
 import { papyr } from 'papyr';
 
@@ -37,7 +37,7 @@ new EditorView({
   state: EditorState.create({
     doc: '# Hello World',
     extensions: [
-      basicSetup,
+      minimalSetup,
       papyr({
         // Papyr configuration
         syntax: {
