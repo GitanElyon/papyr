@@ -1,6 +1,6 @@
-import { EditorView, basicSetup, minimalSetup } from 'codemirror'
+import { EditorView, minimalSetup } from 'codemirror'
 import { EditorState } from '@codemirror/state'
-import { papyr } from '../src/core/index'
+import { papyr } from './src/core/index'
 
 const startState = EditorState.create({
   doc: '# Hello World!\n\nImplemented Syntax:\n\n---\n**bold**\n*italic*\n~~strikethrough~~\n`code`\n[link](https://github.com/gitanelyon/papyr)\n> This is a blockquote\n```javascript\nconsole.log("Hello Code Block");\n```\n- unordered list\n- [ ] checkbox\n\n| Header 1 | Header 2 |\n| -------- | -------- |\n| Cell 1   | Cell 2   |\n| Cell 3   | Cell 4   |\n\nAll info can be found at:\nhttps://github.com/GitanElyon\nEnd of document',
